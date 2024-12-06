@@ -1,0 +1,161 @@
+-- SCRIPT WORKING IN LOOP-MODE.
+
+local Framework = {Depricated = false,VersionNum = "1.0",Seed = nil}
+Framework.Script = function()
+	local g = game
+	Framework.Config = {
+		UpdateTime = 20,
+		Seed = {
+			lng = 25,
+			chars = true,
+			nums = true,
+		},
+	}
+	
+	Framework.Players = g:GetService("Players")
+	Framework.LocalPlayer = Framework.Players.LocalPlayer
+	Framework.StarterGui = g:GetService("StarterGui")
+	Framework.CoreGui = g.CoreGui
+	
+	Framework.SelectedWindows = {
+		"RoactAppExperimentProvider",
+		"RobloxGui",
+		"TopBarApp",
+		"PlayerMenuScreen",
+	}
+	
+	Framework.Notify = function(info)
+		Framework.StarterGui:SetCore("SendNotification",{
+			Title = info.name, -- 
+			Text = info.txt,
+			Duration = info.dur,
+		})
+	end
+	
+	Framework.UpdateSeed = function(Casual)
+		Casual = {}
+		Casual.Do = function()
+			local cfg = Framework.Config.Seed
+			local CHARS = {
+				"A",
+				"B",
+				"C",
+				"D",
+				"E",
+				"F",
+				"G",
+				"H",
+				"I",
+				"J",
+				"K",
+				"L",
+				"M",
+				"N",
+				"O",
+				"P",
+				"Q",
+				"R",
+				"S",
+				"T",
+				"U",
+				"V",
+				"W",
+				"X",
+				"Y",
+				"Z",
+			}
+			
+			local NUMS = {
+				"1",
+				"2",
+				"3",
+				"4",
+				"5",
+				"6",
+				"7",
+				"8",
+				"9",
+				"0",
+			}
+			
+			local ScriptSeed = ""
+			repeat
+				if cfg.chars and cfg.nums then
+					if math.random(1,2) == 1 then
+						ScriptSeed = ScriptSeed..tostring(CHARS[math.random(1,#CHARS)])
+					else
+						ScriptSeed = ScriptSeed..tostring(NUMS[math.random(1,#NUMS)])
+					end
+				elseif cfg.chars then
+					ScriptSeed = ScriptSeed..tostring(CHARS[math.random(1,#CHARS)])
+				elseif cfg.nums then
+					ScriptSeed = ScriptSeed..tostring(NUMS[math.random(1,#NUMS)])
+				else
+					Framework.Notify({name = "CoreUI".." "..Framework.VersionNum,txt = "Seed cannot be created!",dur = 5}) return
+				end
+			until #ScriptSeed == cfg.lng or #ScriptSeed > cfg.lng-1
+			Framework.Seed = ScriptSeed
+		end
+		
+		Casual.Get = function()
+			if Framework.Seed ~= nil then
+				if #Framework.Seed < 25 then
+					Casual.Do()
+				end
+			else
+				Casual.Do()
+			end
+		end
+		Casual.Get()
+	end
+	
+	
+	if Framework.Depricated ~= false then
+		Framework.Notify({name = "CoreUI".." "..Framework.VersionNum,txt = "Script depricated!",dur = 10}) return
+	else
+		Framework.UpdateSeed()
+	end
+	
+	
+	Framework.Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kirvZZ/SplixLib/main/source"))() 
+	local Window = Framework.Library:New({Name = "CoreUI 1.0", Accent = Color3.fromRGB(180, 167, 255)})
+	local Main = Window:Page({Name = "Main"})
+	local WD = Main:Section({Name = "UI Scaling", Side = "Left"})
+	
+	local Scale = 1
+	local Scaling = false
+	
+	local Set = function()
+		if Scaling == true then
+			for z,b in Framework.CoreGui do
+				if table.find(Framework.SelectedWindows,b.Name) then
+					if b:FindFirstChild("CoreUI_Scaling") then
+						b["CoreUI_Scaling"].Scale = Scale
+					else
+						local v = Instance.new("UIScale",b)
+						v.Name = "CoreUI_Scaling"
+						v.Scale = Scale
+					end
+				end
+			end
+		end		
+	end
+	
+	local Core = coroutine.wrap(function()
+		while true do task.wait(Framework.Config.UpdateTime)
+			Set()	
+		end
+	end)
+	
+	
+	
+	
+	
+	WD:Toggle({Title = "Scale-Toggle",Default = Scaling,Callback = function(Default) Scale = Default Set() end})
+	WD:Slider({Name = "Scale-Slider", Minimum = 0, Maximum = 3, Default = Scale, Decimals = 0.05, Pointer = Scale,Callback = function(Default) Scaling = Default Set() end})
+	
+	if #Framework.Seed > Framework.Config.Seed.lng-1 and #Framework.Seed < Framework.Config.Seed.lng+1 then
+		Window:Initialize()
+		Core()
+	end
+end
