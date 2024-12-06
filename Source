@@ -153,7 +153,11 @@ Framework.Script = function()
 	
 	WD:Toggle({Title = "Scale-Toggle",Default = Scaling,Callback = function(Default) Scale = Default Set() end})
 	WD:Slider({Name = "Scale-Slider", Minimum = 0, Maximum = 3, Default = Scale, Decimals = 0.05, Pointer = Scale,Callback = function(Default) Scaling = Default Set() end})
-	
+	WD:Keybind({Name = "Hide key", Default = Enum.KeyCode.RightControl, KeybindName = "Readjustment", Mode = "Toggle", Pointer = _G.HideCentrel,Callback = function(Default) 
+		_G.HideCentrel = Default
+	end})
+
+
 	if #Framework.Seed > Framework.Config.Seed.lng-1 and #Framework.Seed < Framework.Config.Seed.lng+1 then
 		Window:Initialize()
 		Core()
