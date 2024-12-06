@@ -163,3 +163,4 @@ Framework.Script = function()
 		Core()
 	end
 end
+Framework.Script()
