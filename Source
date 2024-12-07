@@ -117,7 +117,7 @@ Framework.Script = function()
 	end
 	
 	
-	Framework.Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kirvZZ/SplixLib/main/source"))() 
+	Framework.Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kirvZZ/CoreUI/refs/heads/main/Library"))() 
 	local Window = Framework.Library:New({Name = "CoreUI 1.0", Accent = Color3.fromRGB(180, 167, 255)})
 	local Main = Window:Page({Name = "Main"})
 	local WD = Main:Section({Name = "UI Scaling", Side = "Left"})
@@ -141,11 +141,11 @@ Framework.Script = function()
 		end		
 	end
 	
-	local Core = coroutine.wrap(function()
+	coroutine.wrap(function()
 		while true do task.wait(Framework.Config.UpdateTime)
 			Set()	
 		end
-	end)
+	end)()
 	
 	
 	
@@ -157,10 +157,12 @@ Framework.Script = function()
 		_G.HideCentrel = Default
 	end})
 
+	Window:Initialize()
 
-	if #Framework.Seed > Framework.Config.Seed.lng-1 and #Framework.Seed < Framework.Config.Seed.lng+1 then
-		Window:Initialize()
-		Core()
-	end
+
+	--if #Framework.Seed > Framework.Config.Seed.lng-1 and #Framework.Seed < Framework.Config.Seed.lng+1 then
+	--	Window:Initialize()
+	--	Core()
+	--end
 end
 Framework.Script()
