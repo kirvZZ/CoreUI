@@ -127,7 +127,7 @@ Framework.Script = function()
 	
 	local Set = function()
 		if Scaling == true then
-			for z,b in Framework.CoreGui do
+			for z,b in Framework.CoreGui:GetChildren() do
 				if table.find(Framework.SelectedWindows,b.Name) then
 					if b:FindFirstChild("CoreUI_Scaling") then
 						b["CoreUI_Scaling"].Scale = Scale
